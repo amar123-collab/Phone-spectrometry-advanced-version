@@ -2,13 +2,13 @@ cff-version: 1.2.0
 message: "If you use this software or data, please cite it as below."
 title: "Phone spectrometer for public outreach: advanced version with validation data"
 version: 2.1.0
-date-released: 2026-11-21
+date-released: 2026-11-24
+doi: 10.5281/zenodo.24506272
 license: MIT
 authors:
   - family-names: Raj
     given-names: Amar
     affiliation: "Nanoscience Center, University of Jyväskylä"
-  # add co-authors here
 references:
   - type: software
     title: "Phone spectrometer for public outreach (basic version)"
