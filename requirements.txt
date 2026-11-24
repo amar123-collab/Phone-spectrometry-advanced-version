@@ -1,0 +1,10 @@
+# Python 3.10 or newer. Install with:  pip install -r requirements.txt
+# Versions used for the paper (Python 3.13): numpy 2.5, scipy 1.18, pillow 12.3, matplotlib 3.11,
+# exifread 3.5, rawpy 0.28, opencv-python 5.0. Older recent versions should also work.
+numpy
+scipy
+pillow
+matplotlib
+exifread
+rawpy            # only for raw_pipeline.py (RAW/DNG files)
+opencv-python    # only for the cuvette and setup figures

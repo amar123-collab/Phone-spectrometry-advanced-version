@@ -21,18 +21,22 @@ Spectrometer: Open-Source Analysis for Teaching and Public Outreach" (submitted)
 | `photos/raw_dng/` | RAW (DNG) versions of the same photographs (separate archive `validation_photos_DNG.zip`). |
 | `photos/setup/` | Top view of the spectrometer (Figure 1b); the 2025 mixed-dye set used at the event (Figure S10). |
 | `uvvis/` | Laboratory UV–vis spectra (CSV, converted from the instrument's UTF-16 export to UTF-8): `a1` ethanol; DCM `b1` 3 µL, `b2` 4 µL, `a2` 5 µL, `a3` 10 µL, `a4` 15 µL, `a5` 20 µL of 5 mM stock in 2.00 mL ethanol; `real1`–`real5` the 2026 mixed-dye set. |
+| `docs/` | **`PYTHON_GUIDE.md`: step-by-step guide to the Python analysis, with a picture for every step** (`docs/guide/`, made by `analysis/guide_figures.py`). |
 | `figs/` | All figures of the paper and supplement (PNG 300 dpi and PDF), the 3D schematic (SVG), and the graphical abstract. |
 
 ## Reproduce the paper's numbers
 
+New to the code? Start with **[docs/PYTHON_GUIDE.md](docs/PYTHON_GUIDE.md)**, which explains each step with pictures.
+
 ```
-pip install numpy scipy pillow matplotlib opencv-python rawpy exifread
+pip install -r requirements.txt
 cd analysis
 python analyse_paperB.py      # ~1.5 min, writes results.json and arrays.npz
 python make_figs.py           # figures into ../figs
 python raw_pipeline.py        # same analysis from the RAW (DNG) files (needs the DNG archive in photos/raw/ern_photos)
 python blank_baseline.py      # baseline correction from the repeated ethanol blanks
 python calib_compare.py       # calibration options for the mixed-dye set
+python guide_figures.py       # pictures for docs/PYTHON_GUIDE.md (one per analysis step)
 python gamma_2026.py          # encoded vs linearized absorbance, 2026 set and DCM (Figure 3b)
 python fig_basic2025.py       # Figure S10: 2025 set with the basic version (needs the basic record's example_data in basic_example_data/)
 python fig3_merged.py         # Figure 3: gamma encoding, camera response, wavelength calibration
