@@ -77,20 +77,9 @@ protocol (Pro mode, fixed settings; SI section S12 of the paper), but their phot
 
 Raj, A. *Phone spectrometer for public outreach: advanced version with validation data* (v2.1.0). Zenodo, 2026. https://doi.org/10.5281/zenodo.24506272
 
-Please also cite the companion paper (details will be added on publication). `CITATION.cff` gives the same information in machine-readable form.
 
 ## License
 
 MIT (see `matlab_code/LICENSE`). Photographs and spectra are released under the same terms.
 
-## Figure files and their numbers in the JCE manuscript
 
-| Figure | File (figs/) |
-|---|---|
-| 1 | Fig1_setup |
-| 2 | Fig3_photo_to_absorbance |
-| 3 | Fig3_gamma_response_calibration |
-| 4 | Fig5_linearity |
-| 5 | Fig5_event_samples |
-| S10 | S_basic2025 (2025 set at the event, basic version) |
-| S13, S14 | S_event_samples_normalized, S_event_samples_absolute |
