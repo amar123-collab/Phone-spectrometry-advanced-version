@@ -58,7 +58,7 @@ addChk('Follow small phone movements (align on blue)', true, @(v) setOpt('align'
 
 addHead('4. Wavelength axis (optional)');
 r = r + 1;
-ddDisp = uidropdown(L, 'Items', {'Prism (curved fit)', 'Grating (straight line)'}, ...
+ddDisp = uidropdown(L, 'Items', {'Prism (curved fit)', 'Grating (straight line)'}, 'Tooltip', 'Shape used for laser/lamp calibration; "From known peaks" always fits a straight line', ...
     'ValueChangedFcn', @(s, ~) setOpt('dispersion', lower(strtok(s.Value))));
 ddDisp.Layout.Row = r;  ddDisp.Layout.Column = [1 2];
 addBtn('Calibrate: selected laser photo', @calibrateLaser);
@@ -384,6 +384,11 @@ updateLabels();
         f = cellstr(f);
         for i = 1:numel(f)
             [wl, A] = psm_readSpectrumCSV(fullfile(d, f{i}));
+            [wl, k] = sort(wl);  A = A(k);
+            for c = [486 656]                         % lamp-change lines of the instrument (as in uvvis_process)
+                bad = abs(wl - c) <= 2;  nb = abs(wl - c) <= 10 & ~bad;
+                if nnz(bad) > 0 && nnz(nb) >= 4, pp = polyfit(wl(nb) - c, A(nb), 2);  A(bad) = polyval(pp, wl(bad) - c); end
+            end
             m = wl >= 380 & wl <= 800;  wl = wl(m);  A = A(m);
             A = A - mean(A(wl >= 750), 'omitnan');
             [~, n] = fileparts(f{i});
@@ -393,7 +398,7 @@ updateLabels();
         if strcmp(S.cal.type, 'none')
             status('Lab spectra loaded. They will appear once the axis is calibrated in nm (step 4).');
         else
-            status(sprintf('%d lab spectra added (baseline 750-800 nm removed).', numel(f)));
+            status(sprintf('%d lab spectra added (baseline 750-800 nm removed, lamp lines at 486 and 656 nm smoothed).', numel(f)));
         end
     end
 
