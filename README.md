@@ -59,6 +59,19 @@ Figure 5b uses an empirical adjustment of the wavelength axis above 587 nm (the 
 Detection limit (cuvette removed and replaced): A = 0.11 (3 µM DCM). Reference-based wavelength calibration:
 cross-validated error 8.5 nm.
 
+## What has been tested
+
+| Part | Tested with | Result |
+|---|---|---|
+| Python analysis (`analysis/`) | the 2026 validation photos in this repository | reproduces every number in the paper; rerunning on a clean copy gives an identical `results.json` |
+| MATLAB `batch_example.m` | `matlab_code/example_data` (2026 photos), MATLAB R2026b | same spectra and band positions as the Python analysis |
+| MATLAB app `PhoneSpectrometer.m`: measuring and peak table | same data, MATLAB R2026b | as above |
+| MATLAB app: wavelength axis from known peaks, lab overlay, normalizing, saving and loading | same data, MATLAB R2026b | being checked before the v2.1.0 release |
+| Live mode (watching a folder), drawing the strip by hand, calibration from laser or fluorescent-lamp photos, `experiments/e1_calibration.m` and `e3_dilution.m` | not used for the paper | provided for new measurements; please report problems through GitHub issues |
+
+The analysis was validated with one phone (Samsung Galaxy S25 FE). Other phones should work with the same
+protocol (Pro mode, fixed settings; SI section S12 of the paper), but their photos have not yet been analyzed here.
+
 ## License
 
 MIT (see `matlab_code/LICENSE`). Photographs and spectra are released under the same terms.
