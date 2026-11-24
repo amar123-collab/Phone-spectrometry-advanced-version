@@ -1,5 +1,7 @@
 # Phone Spectrometer for Public Outreach — Advanced Version (v2.1.0)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24506272.svg)](https://doi.org/10.5281/zenodo.24506272)
+
 Open-source code and validation data for turning ordinary smartphone photographs of a projected spectrum
 into absorption spectra, with gamma (sRGB) linearization, a measured camera response, and validation against
 a laboratory UV–vis spectrophotometer.
@@ -18,7 +20,7 @@ Spectrometer: Open-Source Analysis for Teaching and Public Outreach" (submitted)
 | `matlab_code/` | MATLAB code: `v1_as_used/` (event scripts), `v2_user_friendly/` (point-and-click app, batch script, UV–vis tool, `core/`, `experiments/` for the validation protocol). No toolboxes needed (tested in R2026b). See `matlab_code/v2_user_friendly/HOW_TO_USE.txt`. |
 | `analysis/` | Python analysis that produced every number and figure in the paper. `analyse_paperB.py` → `results.json`; `response.py` (camera response, Debevec–Malik); `make_figs.py`, `fig1_setup.py`, `cuvette_panel.py`, `graphical_abstract.py` (figures). |
 | `photos/raw/ern_photos/` | All validation photographs (JPG), Samsung Galaxy S25 FE, 19–20 Nov 2026, named by time stamp. `photos/photo_sets.md` and `photos/inventory.tsv` say which photo is which (dark, ethanol references, DCM series, 2026 mixed-dye set, lasers, shutter series). |
-| `photos/raw_dng/` | RAW (DNG) versions of the same photographs (separate archive `validation_photos_DNG.zip`). |
+| `validation_photos_DNG.zip` (separate file in the Zenodo record) | RAW (DNG) versions of the same 69 photographs (350 MB; 1.7 GB unzipped). Unzip into `photos/raw/ern_photos/` to run `raw_pipeline.py`. |
 | `photos/setup/` | Top view of the spectrometer (Figure 1b); the 2025 mixed-dye set used at the event (Figure S10). |
 | `uvvis/` | Laboratory UV–vis spectra (CSV, converted from the instrument's UTF-16 export to UTF-8): `a1` ethanol; DCM `b1` 3 µL, `b2` 4 µL, `a2` 5 µL, `a3` 10 µL, `a4` 15 µL, `a5` 20 µL of 5 mM stock in 2.00 mL ethanol; `real1`–`real5` the 2026 mixed-dye set. |
 | `docs/` | **`PYTHON_GUIDE.md`: step-by-step guide to the Python analysis, with a picture for every step** (`docs/guide/`, made by `analysis/guide_figures.py`). |
@@ -33,7 +35,7 @@ pip install -r requirements.txt
 cd analysis
 python analyse_paperB.py      # ~1.5 min, writes results.json and arrays.npz
 python make_figs.py           # figures into ../figs
-python raw_pipeline.py        # same analysis from the RAW (DNG) files (needs the DNG archive in photos/raw/ern_photos)
+python raw_pipeline.py        # same analysis from the RAW (DNG) files (needs validation_photos_DNG.zip from the Zenodo record, unzipped into photos/raw/ern_photos)
 python blank_baseline.py      # baseline correction from the repeated ethanol blanks
 python calib_compare.py       # calibration options for the mixed-dye set
 python guide_figures.py       # pictures for docs/PYTHON_GUIDE.md (one per analysis step)
@@ -71,6 +73,12 @@ cross-validated error 8.5 nm.
 
 The analysis was validated with one phone (Samsung Galaxy S25 FE). Other phones should work with the same
 protocol (Pro mode, fixed settings; SI section S12 of the paper), but their photos have not yet been analyzed here.
+
+## How to cite
+
+Raj, A. *Phone spectrometer for public outreach: advanced version with validation data* (v2.1.0). Zenodo, 2026. https://doi.org/10.5281/zenodo.24506272
+
+Please also cite the companion paper (details will be added on publication). `CITATION.cff` gives the same information in machine-readable form.
 
 ## License
 
