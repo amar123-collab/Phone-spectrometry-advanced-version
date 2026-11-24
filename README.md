@@ -10,8 +10,7 @@ This is the **advanced version**. The **basic version** (v1.0.0, the code used a
 https://doi.org/10.5281/zenodo.23400260) remains available unchanged. Everything in the basic version is
 included here, plus the extensions and data listed below.
 
-Companion paper: A. Raj et al., "Gamma-Aware Smartphone Absorption Spectroscopy with a Spare-Parts Prism
-Spectrometer: Open-Source Analysis for Teaching and Public Outreach" (submitted).
+
 
 ## Contents
 
