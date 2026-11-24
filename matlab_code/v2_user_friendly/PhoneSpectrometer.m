@@ -54,7 +54,7 @@ lblRef = addInfo('Reference: none.  Dark: none (optional).');
 addHead('3. Rainbow strip');
 addBtn('Find automatically', @autoStrip, 1);
 addBtn('Draw by hand...', @drawStrip, 2);
-addChk('Follow small phone movements (align on blue)', true, @(v) setOpt('align', v));
+cbAlign = addChk('Follow small phone movements (align on blue)', true, @(v) setOpt('align', v));
 
 addHead('4. Wavelength axis (optional)');
 r = r + 1;
@@ -78,7 +78,7 @@ l = uilabel(L, 'Text', 'Dim-end cut-off (%)', 'Tooltip', 'Ignore positions where
 efMin = uieditfield(L, 'numeric', 'Value', S.opt.minRef, 'Limits', [0 95], ...
     'ValueChangedFcn', @(s, ~) safe(@() setOpt('minRef', s.Value)));
 efMin.Layout.Row = r;  efMin.Layout.Column = 2;
-addChk('Normalise curves to peak = 1', false, @(v) setOpt('normalise', v));
+cbNorm = addChk('Normalise curves to peak = 1', false, @(v) setOpt('normalise', v));
 
 addHead('6. Compare and save');
 addBtn('Add lab spectrum (CSV)...', @addLab, 1);
@@ -463,7 +463,10 @@ updateLabels();
         if isequal(f, 0), return; end
         st = load(fullfile(d, f));
         S.opt = st.opt;  S.cal = st.cal;  S.folder = st.folder;
-        efMin.Value = S.opt.minRef;
+        efMin.Value = S.opt.minRef;                 % show the loaded options on screen
+        cbAlign.Value = S.opt.align;  cbNorm.Value = S.opt.normalise;
+        if strcmp(S.opt.dispersion, 'grating'), ddDisp.Value = ddDisp.Items{2}; else, ddDisp.Value = ddDisp.Items{1}; end
+        if strcmp(S.opt.offset, 'none'), ddOff.Value = ddOff.Items{1}; else, ddOff.Value = ddOff.Items{2}; end
         if isfolder(S.folder) && ~isempty(st.refName) && isfile(fullfile(S.folder, st.refName))
             S.seen = listImages();
             S.ref = psm_loadPhoto(fullfile(S.folder, st.refName));
