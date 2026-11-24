@@ -1,0 +1,14 @@
+{
+  "title": "Phone Spectrometer for Public Outreach: Advanced Version with Validation Data",
+  "version": "2.1.0",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {"name": "Raj, Amar", "affiliation": "Nanoscience Center, University of Jyväskylä"}
+  ],
+  "description": "<p>Advanced version of the open-source smartphone absorption spectroscopy code used at European Researchers' Night (basic version: 10.5281/zenodo.23400260). Adds sRGB linearization switch, prism and reference-based wavelength calibration, validation scripts, a Python analysis that reproduces all numbers and figures of the companion paper, and all validation data: smartphone photographs (JPG and DNG, Samsung Galaxy S25 FE) of a DCM dilution series, ethanol blanks, a mixed-dye sample set, laser and shutter-series photographs, and laboratory UV-vis spectra.</p>",
+  "keywords": ["smartphone spectroscopy", "absorption spectroscopy", "gamma correction", "sRGB", "camera response", "prism spectrometer", "open-source", "chemical education", "public outreach"],
+  "related_identifiers": [
+    {"identifier": "10.5281/zenodo.23400260", "relation": "isDerivedFrom", "scheme": "doi"}
+  ]
+}

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+analysis/arrays.npz
+analysis/raw_arrays.npz
+*.dng
+.DS_Store
