@@ -107,8 +107,9 @@ lblStatus = uilabel(main, 'Text', 'Start with step 1: choose the folder that hol
     'FontWeight', 'bold');
 lblStatus.Layout.Row = 2;  lblStatus.Layout.Column = [1 2];
 
-tmr = timer('ExecutionMode', 'fixedSpacing', 'Period', 1.5, 'BusyMode', 'drop', ...
-            'TimerFcn', @(~, ~) poll());
+try, oldTmr = timerfindall('Tag', 'PhoneSpectrometerTimer'); stop(oldTmr); delete(oldTmr); catch, end   % leftovers from a previous session
+tmr = timer('ExecutionMode', 'fixedSpacing', 'Period', 1.5, 'BusyMode', 'drop', 'Tag', 'PhoneSpectrometerTimer', ...
+            'TimerFcn', @(~, ~) pollIfOpen(), 'ErrorFcn', @(t, ~) stop(t));
 fig.CloseRequestFcn = @onClose;
 updateLabels();
 
@@ -480,7 +481,14 @@ updateLabels();
 
     function onClose(~, ~)
         try, stop(tmr); delete(tmr); catch, end
-        delete(fig);
+        try, allTmr = timerfindall('Tag', 'PhoneSpectrometerTimer'); stop(allTmr); delete(allTmr); catch, end
+        try, delete(fig); catch, closereq; end
+    end
+
+    function pollIfOpen()
+        % the timer must never outlive the window
+        if ~isvalid(fig), try, stop(tmr); delete(tmr); catch, end, return; end
+        poll();
     end
 
 %% ================= layout helpers =================
