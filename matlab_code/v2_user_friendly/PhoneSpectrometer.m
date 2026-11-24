@@ -62,7 +62,7 @@ ddDisp = uidropdown(L, 'Items', {'Prism (curved fit)', 'Grating (straight line)'
     'ValueChangedFcn', @(s, ~) setOpt('dispersion', lower(strtok(s.Value))));
 ddDisp.Layout.Row = r;  ddDisp.Layout.Column = [1 2];
 addBtn('Calibrate: selected laser photo', @calibrateLaser);
-addBtn('Estimate from known peaks...', @calibrateModel, 1);
+addBtn('From known peaks...', @calibrateModel, 1);   % fits a prism model to known absorption maxima
 addBtn('Remove calibration', @removeCal, 2);
 lblCal = addInfo(S.cal.info);
 
@@ -74,7 +74,7 @@ ddOff = uidropdown(L, 'Items', {'No offset correction (fixed exposure)', 'Auto o
     'ValueChangedFcn', @(s, ~) safe(@() setOffset(s.Value)));
 ddOff.Layout.Row = r;  ddOff.Layout.Column = [1 2];
 r = r + 1;
-l = uilabel(L, 'Text', 'Ignore dim ends below (% of ref.)');  l.Layout.Row = r;  l.Layout.Column = 1;
+l = uilabel(L, 'Text', 'Dim-end cut-off (%)', 'Tooltip', 'Ignore positions where the reference is below this % of its maximum');  l.Layout.Row = r;  l.Layout.Column = 1;
 efMin = uieditfield(L, 'numeric', 'Value', S.opt.minRef, 'Limits', [0 95], ...
     'ValueChangedFcn', @(s, ~) safe(@() setOpt('minRef', s.Value)));
 efMin.Layout.Row = r;  efMin.Layout.Column = 2;
