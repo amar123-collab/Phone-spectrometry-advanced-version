@@ -9,14 +9,17 @@ function T = uvvis_process(files, varargin)
 %   Options (defaults in brackets)
 %     'Range'          wavelength range kept, nm            [380 800]
 %     'BaselineWindow' region where samples do not absorb   [750 800]
-%     'LampArtefacts'  instrument lamp lines to smooth over [486 656]
+%     'LampArtefacts'  windows [lo hi] (nm) to smooth over   [484 488; 630 641; 653 659]
+%                      (lamp/filter changes of the paper's instrument; [] = none)
+%     'MinNormalise'   spectra with A_max below this are not  0.05
+%                      normalised (blanks, e.g. the solvent)
 %     'Names'          legend names (cell array)            file names
 %     'Plot'           show figure                          true
 %     'SaveAs'         output prefix ('' = do not save)     'UVVis_processed'
 %
-%   Steps: crop -> replace +/-2 nm around each lamp line by a local quadratic
-%   fit (+/-10 nm) -> subtract mean absorbance in BaselineWindow -> normalise
-%   to the maximum. All spectra are put on a common 1 nm grid.
+%   Steps: crop -> replace each lamp-change window by a local quadratic
+%   fit (6 nm either side) -> subtract mean absorbance in BaselineWindow ->
+%   normalise to the maximum (not for blanks). All spectra are put on a common 1 nm grid.
 %   Reads UTF-16 instrument exports directly.
 
 here = fileparts(mfilename('fullpath'));
@@ -25,7 +28,8 @@ addpath(fullfile(here, 'core'));
 p = inputParser;
 addParameter(p, 'Range', [380 800]);
 addParameter(p, 'BaselineWindow', [750 800]);
-addParameter(p, 'LampArtefacts', [486 656]);
+addParameter(p, 'LampArtefacts', [484 488; 630 641; 653 659]);
+addParameter(p, 'MinNormalise', 0.05);
 addParameter(p, 'Names', {});
 addParameter(p, 'Plot', true);
 addParameter(p, 'SaveAs', 'UVVis_processed');
@@ -62,13 +66,7 @@ for k = 1:nF
     [wl, i] = sort(wl);  A = A(i);
     m = wl >= o.Range(1) - 15 & wl <= o.Range(2) + 15;
     wl = wl(m);  A = A(m);
-    for c = o.LampArtefacts
-        bad = abs(wl - c) <= 2;  fit = abs(wl - c) <= 10 & ~bad;
-        if nnz(bad) > 0 && nnz(fit) >= 4
-            pp = polyfit(wl(fit) - c, A(fit), 2);
-            A(bad) = polyval(pp, wl(bad) - c);
-        end
-    end
+    A = psm_patchLamp(wl, A, o.LampArtefacts);
     Ag = interp1(wl, A, wlg, 'linear', NaN);
     bw = wlg >= o.BaselineWindow(1) & wlg <= o.BaselineWindow(2);
     base = mean(Ag(bw), 'omitnan');
@@ -78,7 +76,7 @@ for k = 1:nF
     Aall(:, k) = Ag;
     vn = matlab.lang.makeValidName(names{k});
     T.([vn '_A']) = Ag;
-    T.([vn '_Anorm']) = Ag / Amax;
+    if Amax >= o.MinNormalise, T.([vn '_Anorm']) = Ag / Amax; else, T.([vn '_Anorm']) = nan(size(Ag)); end
     fprintf('%-25s %7d nm %8.3f %10.3f\n', names{k}, wlg(i), Amax, base);
 end
 
@@ -89,7 +87,11 @@ if o.Plot
     ax2 = subplot(1, 2, 2);  hold(ax2, 'on');
     for k = 1:nF
         plot(ax1, wlg, Aall(:, k), 'LineWidth', 1.8, 'DisplayName', names{k});
-        plot(ax2, wlg, Aall(:, k) / max(Aall(:, k)), 'LineWidth', 1.8, 'DisplayName', names{k});
+        if max(Aall(:, k)) >= o.MinNormalise              % blanks (e.g. the solvent) are not normalised
+            plot(ax2, wlg, Aall(:, k) / max(Aall(:, k)), 'LineWidth', 1.8, 'DisplayName', names{k});
+        else
+            plot(ax2, NaN, NaN, 'LineWidth', 1.8, 'DisplayName', [names{k} ' (blank, not normalised)']);
+        end
     end
     xlabel(ax1, 'Wavelength (nm)');  ylabel(ax1, 'Absorbance (baseline-corrected)');  box(ax1, 'off');
     xlabel(ax2, 'Wavelength (nm)');  ylabel(ax2, 'Normalised absorbance');            box(ax2, 'off');

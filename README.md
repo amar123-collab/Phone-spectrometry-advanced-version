@@ -65,8 +65,8 @@ cross-validated error 8.5 nm.
 |---|---|---|
 | Python analysis (`analysis/`) | the 2026 validation photos in this repository | reproduces every number in the paper; rerunning on a clean copy gives an identical `results.json` |
 | MATLAB `batch_example.m` | `matlab_code/example_data` (2026 photos), MATLAB R2026b | same spectra and band positions as the Python analysis |
-| MATLAB app `PhoneSpectrometer.m`: measuring and peak table | same data, MATLAB R2026b | as above |
-| MATLAB app: wavelength axis from known peaks, lab overlay, normalizing, saving and loading | same data, MATLAB R2026b | being checked before the v2.1.0 release |
+| MATLAB app `PhoneSpectrometer.m`: measuring, peak table, wavelength axis from known peaks, lab overlay, normalizing, saving and loading settings | same data, MATLAB R2026b | same band positions as the Python analysis (within 5 nm); axis 434–658 nm |
+| MATLAB `uvvis_process.m` | `example_data/uvvis`, MATLAB R2026b | same lamp-artefact correction as the Python code (identical values) |
 | Live mode (watching a folder), drawing the strip by hand, calibration from laser or fluorescent-lamp photos, `experiments/e1_calibration.m` and `e3_dilution.m` | not used for the paper | provided for new measurements; please report problems through GitHub issues |
 
 The analysis was validated with one phone (Samsung Galaxy S25 FE). Other phones should work with the same
