@@ -544,7 +544,7 @@ updateLabels();
             if calibrated, pkTxt = sprintf('%.0f nm', x(j)); else, pkTxt = sprintf('%d px', j); end
             nt = S.results(i).notes;  fv = find(isfinite(A));
             if ~isempty(fv) && min(j - fv(1), fv(end) - j) <= 0.03 * (fv(end) - fv(1))   % maximum at the end of the usable range
-                nt = strjoin([{nt}, {'edge of range: band may lie outside'}], '; ');
+                nt = strjoin([{nt}, {'at range edge'}], '; ');
             end
             if am > 1.5, nt = strjoin([{nt}, {'A > 1.5: stray light'}], '; '); end
             nt = regexprep(nt, '^; ', '');
