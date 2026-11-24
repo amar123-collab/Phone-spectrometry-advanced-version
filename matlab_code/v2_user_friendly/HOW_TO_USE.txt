@@ -71,7 +71,7 @@ The steps in the app
    "Calibrate: selected laser photo". Type the wavelengths. A check figure
    shows which spots were found.
    Choose "Prism" (curved fit, needs 3+ lines) or "Grating" (straight line).
-   "From known peaks..." fits a prism model to the absorption peaks
+   "From known peaks..." fits a straight line to the absorption peaks
    of samples whose lambda_max you know. It is NOT independent - report it
    as approximate.
 

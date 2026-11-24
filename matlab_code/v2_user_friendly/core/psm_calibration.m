@@ -8,9 +8,11 @@ function cal = psm_calibration(type, pix, nm, order)
 %         prism dispersion model  pix = a + b / nm^2  fitted to independent
 %         lines (laser spots, lamp lines); 3+ lines give a residual check
 %   cal = psm_calibration('model', pix, nm)
-%         prism dispersion model  pix = a + b / nm^2  fitted to absorption
-%         peaks of samples with known lambda_max. NOT independent: use only
-%         when no laser calibration exists, and say so when reporting.
+%         straight line nm = a + b * pix fitted to the absorption maxima of
+%         samples with known lambda_max (as in the paper). A straight line is
+%         used because such peaks usually span only part of the range, and a
+%         curved prism model extrapolates poorly beyond them. NOT independent:
+%         use only when no laser/lamp calibration exists, and say so when reporting.
 %
 %   Use x = psm_wavelength(cal, 1:n) to convert positions to nm.
 cal = struct('type', type, 'p', [], 'resid', [], 'info', '');
@@ -34,11 +36,12 @@ switch lower(type)
         cal.info = sprintf('Prism-model calibration (pix = a + b/nm^2) on %d lines, residuals %s nm.', ...
                            numel(pix), mat2str(round(10 * cal.resid) / 10));
     case 'model'
-        X = [ones(numel(pix), 1), 1 ./ nm(:).^2];
-        cal.p = X \ pix(:);                       % [a; b]
-        cal.resid = psm_wavelength(cal, pix(:)') - nm(:)';
-        cal.info = sprintf(['Estimated axis (prism model fitted to known peaks), residuals %s nm. ', ...
-                            'Not an independent calibration.'], mat2str(round(10 * cal.resid) / 10));
+        cal.p = polyfit(pix(:), nm(:), 1);
+        cal.resid = polyval(cal.p, pix(:)') - nm(:)';
+        cal.range = [min(nm), max(nm)];
+        cal.info = sprintf(['Estimated axis (straight line through %d known peaks, %.0f-%.0f nm), residuals %s nm. ', ...
+                            'Not an independent calibration; outside %.0f-%.0f nm the axis is extrapolated.'], ...
+                           numel(pix), min(nm), max(nm), mat2str(round(10 * cal.resid) / 10), min(nm), max(nm));
     otherwise
         error('psm:cal', 'Unknown calibration type "%s".', type);
 end

@@ -62,7 +62,7 @@ ddDisp = uidropdown(L, 'Items', {'Prism (curved fit)', 'Grating (straight line)'
     'ValueChangedFcn', @(s, ~) setOpt('dispersion', lower(strtok(s.Value))));
 ddDisp.Layout.Row = r;  ddDisp.Layout.Column = [1 2];
 addBtn('Calibrate: selected laser photo', @calibrateLaser);
-addBtn('From known peaks...', @calibrateModel, 1);   % fits a prism model to known absorption maxima
+addBtn('From known peaks...', @calibrateModel, 1);   % straight line through known absorption maxima
 addBtn('Remove calibration', @removeCal, 2);
 lblCal = addInfo(S.cal.info);
 
@@ -295,9 +295,10 @@ updateLabels();
             [~, pk(i)] = max(currentA(use(i)));
         end
         S.cal = psm_calibration('model', pk, nm(use)');
-        uialert(fig, ['The axis was estimated from the samples'' own peaks, so it is not an ', ...
-            'independent calibration. Report it as approximate, or calibrate with lasers.'], ...
-            'Estimated axis', 'Icon', 'info');
+        uialert(fig, sprintf(['The axis was estimated from the samples'' own peaks (straight line), so it is not an ', ...
+            'independent calibration. Between %.0f and %.0f nm it is interpolated; outside that range it is extrapolated ', ...
+            'and less certain. Report it as approximate, or calibrate with lasers or a fluorescent lamp.'], ...
+            min(nm(use)), max(nm(use))), 'Estimated axis', 'Icon', 'info');
         updateLabels();  redraw();
         status(S.cal.info);
     end
