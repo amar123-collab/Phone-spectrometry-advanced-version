@@ -534,7 +534,13 @@ updateLabels();
             plot(axInt, x, S.results(i).Is, 'Color', cols(i, :), 'DisplayName', S.results(i).name);
             plot(axA, x, A, 'Color', cols(i, :), 'LineWidth', 1.8, 'DisplayName', S.results(i).name);
             if calibrated, pkTxt = sprintf('%.0f nm', x(j)); else, pkTxt = sprintf('%d px', j); end
-            rows(i, :) = {S.results(i).name, pkTxt, round(am, 2), S.results(i).notes};
+            nt = S.results(i).notes;  fv = find(isfinite(A));
+            if ~isempty(fv) && min(j - fv(1), fv(end) - j) <= 0.03 * (fv(end) - fv(1))   % maximum at the end of the usable range
+                nt = strjoin([{nt}, {'maximum at end of range: band may lie outside it'}], '; ');
+            end
+            if am > 1.5, nt = strjoin([{nt}, {'A > 1.5: stray light may flatten the top'}], '; '); end
+            nt = regexprep(nt, '^; ', '');
+            rows(i, :) = {S.results(i).name, pkTxt, round(am, 2), nt};
         end
         if calibrated
             for i = 1:numel(S.lab)
