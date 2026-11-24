@@ -15,6 +15,8 @@ refFile     = '01_reference_ethanol.jpg';   % ethanol in the cuvette (or no samp
 darkFile    = '00_dark.jpg';                % lamp blocked, same camera settings; '' = none
 sampleFiles = {'02_DCM_49uM.jpg', '03_sample1.jpg', '04_sample2.jpg', '05_sample3.jpg', '06_sample4.jpg', '07_sample5.jpg'};
 sampleNames = {'DCM 49.5 uM', 'Sample 1 (violet)', 'Sample 2 (cyan)', 'Sample 3 (magenta)', 'Sample 4 (pink)', 'Sample 5 (lime)'};
+sampleColors = [0.65 0.21 0.01; 0.43 0.25 0.69; 0.12 0.47 0.71; 0.76 0.09 0.36; 0.88 0.27 0.48; 0.60 0.66 0.00];
+                                            % one RGB row per sample (same colors as in the paper); [] = MATLAB default
 
 laserFile   = '';                           % photo of laser spots for calibration; '' = pixel axis
 laserNm     = [405 532 650];                % wavelengths of those spots (any order)
@@ -77,11 +79,12 @@ end
 % figures
 f1 = figure('Color', 'w', 'Name', 'Light along the rainbow');  hold on;
 plot(x, Iref, 'k', 'LineWidth', 2, 'DisplayName', 'Reference');
-for k = 1:nS, plot(x, Is(k, :), 'LineWidth', 1.4, 'DisplayName', sampleNames{k}); end
+if size(sampleColors, 1) < nS, sampleColors = lines(nS); end   % same color for a sample in every figure
+for k = 1:nS, plot(x, Is(k, :), 'Color', sampleColors(k, :), 'LineWidth', 1.4, 'DisplayName', sampleNames{k}); end
 xlabel(xlab);  ylabel('Intensity (a.u.)');  legend('Box', 'off');  box off;
 
 f2 = figure('Color', 'w', 'Name', 'Absorbance');  hold on;
-for k = 1:nS, plot(x, A(k, :), 'LineWidth', 2, 'DisplayName', sampleNames{k}); end
+for k = 1:nS, plot(x, A(k, :), 'Color', sampleColors(k, :), 'LineWidth', 2, 'DisplayName', sampleNames{k}); end
 yline(0, ':', 'HandleVisibility', 'off');
 xlabel(xlab);  ylabel('Absorbance');  legend('Box', 'off', 'Location', 'best');  box off;
 
